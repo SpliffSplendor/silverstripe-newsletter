@@ -1,0 +1,7 @@
+Running SS-CMS 4.6.0
+[2020-11-04 16:03:37] error-log.ERROR: Uncaught Exception Error: "Call to a member function setTitle() on null" at /var/www/html/vendor/silverstripe/newsletter/src/Form/GridField/NewsletterGridFieldDetailForm_ItemRequest.php line 32 {"exception":"[object] (Error(code: 0): Call to a member function setTitle() on null at /var/www/html/vendor/silverstripe/newsletter/src/Form/GridField/NewsletterGridFieldDetailForm_ItemRequest.php:32)"} []
+
+Problem identified was the naming of the src/Form/GridField/NewsletterGridFieldDetailForm_ItemRequest.php line 31:
+$actions->fieldByName("action_doSave") this did return null and didn't initiate a recursive search.
+$actions->fieldByName("MajorActions.action_doSave") does.
+
