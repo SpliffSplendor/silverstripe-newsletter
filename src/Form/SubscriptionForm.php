@@ -23,13 +23,12 @@ class SubscriptionForm extends Form
 {
     public function __construct($controller, $name)
     {
-        $fields = singleton(Recipient::class)->getFrontEndFields()->dataFields();
-
-        if ($fields && is_array($fields)) {
-            $fields = new FieldList($fields);
-        }
-        else if (!$fields || $fields instanceof FieldList) {
-            $fields = new FieldList();
+        /** @var array $frontEndFields ['fieldName' => Field] */
+        $frontEndFields = singleton(Recipient::class)->getFrontEndFields()->dataFields();
+        $fields = new FieldList();
+        if (! empty($frontEndFields)) {
+            $frontEndFieldList = new FieldList($frontEndFields);
+            $fields = $controller->data()->getFrontendFieldList($frontEndFieldList);
         }
 
         if ($controller->MailingLists) {
@@ -47,27 +46,29 @@ class SubscriptionForm extends Form
             $fields->push($newsletterSection);
         }
 
-        $buttonTitle = $this->SubmissionButtonText;
+        $buttonTitle = $controller->data()->SubmissionButtonText;
 
         $actions = new FieldList(
             new FormAction('doSubscribe', $buttonTitle)
         );
 
-        $required = new RequiredFields(['Email']);
+        $requiredFields = $controller->data()->getRequiredFieldNames();
+        $required = new RequiredFields($requiredFields);
 
         parent::__construct($controller, $name, $fields, $actions, $required);
     }
 
-     /**
-      * Subscribes a given email address to the {@link NewsletterType} associated
-      * with this page
-      *
-      * @param array
-      * @param Form
-      * @param SS_HTTPRequest
-      *
-      * @return Redirection
-      */
+    /**
+     * Subscribes a given email address to the {@link NewsletterType} associated
+     * with this page
+     *
+     * @param array
+     * @param Form
+     * @param SS_HTTPRequest
+     *
+     * @return Redirection
+     * @throws \SilverStripe\ORM\ValidationException
+     */
     public function doSubscribe($data, $form, $request)
     {
         // check to see if member already exists
