@@ -4,3 +4,20 @@ Running SS-CMS 4.6.0
 Problem identified was the naming of the src/Form/GridField/NewsletterGridFieldDetailForm_ItemRequest.php line 31:
 $actions->fieldByName("action_doSave") this did return null and didn't initiate a recursive search.
 $actions->fieldByName("MajorActions.action_doSave") does.
+
+[2020-11-05 17:24:28] error-log.ERROR: Object->__call(): the method 'addCustomHeader' does not exist on 'SilverStripe\Newsletter\Control\Email\NewsletterEmail' {"exception":"[object] (BadMethodCallException(code: 0): Object->__call(): the method 'addCustomHeader' does not exist on 'SilverStripe\\Newsletter\\Control\\Email\\NewsletterEmail' at /sites/cinescuela/www/vendor/silverstripe/framework/src/Core/CustomMethods.php:54)"} []
+
+Method addCustomHeader is not part of the NewsletterEmail class or its parents, called in src/Model/SendRecipientQueue.php line 82
+    $email->addCustomHeader('Reply-To', $newsletter->ReplyTo);
+Because it's the only occurrence and is used for setting the Reply-To header, we can use
+    $email->setReplyTo($newsletter->ReplyTo);
+instead.
+
+Missing js requirement for 'Send notification Email to subscriber'
+
+Keep sequence of drag'n'drop order
+
+Keep selected checkbox on CheckboxSetWithExtraFields
+
+Show validation time for verification email in admin
+add translation for above

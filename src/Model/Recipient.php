@@ -279,19 +279,26 @@ class Recipient extends DataObject
         return $can;
     }
 
+    /**
+     * @param null $params
+     *
+     * @return FieldList
+     */
     public function getFrontEndFields($params = null)
     {
+        /** @var FieldList $fields */
         $fields = parent::getFrontEndFields($params);
-        $exludes = array(
+        $excludes = array(
             "BouncedCount",
             "Blacklisted",
             "ReceivedCount",
             "ValidateHash",
             "ValidateHashExpired",
             "Verified",
+            "GUID",
         );
 
-        foreach ($exludes as $exclude) {
+        foreach ($excludes as $exclude) {
             $fields->removeByName($exclude);
         }
 
