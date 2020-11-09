@@ -71,3 +71,5 @@ en_GB:
     SENDFAIL: "Sending to the Following Recipients Failed"
     SENTOK: "Sending to the Following Recipients was Successful"
     SN: "Surname"
+  Newsletter:
+    DaysVerificationIsValid: "The verification email is valid for %d days."

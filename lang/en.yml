@@ -146,3 +146,5 @@ en:
     DESCRIPTION: 'Generic content page'
     PLURALNAME: 'Unsubscription Pags'
     SINGULARNAME: 'Unsubscription Page'
+  Newsletter:
+    DaysVerificationIsValid: "The verification email is valid for %d days."

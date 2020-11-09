@@ -71,3 +71,5 @@ es_MX:
     SENDFAIL: "El envío a los Siguientes Destinatarios ha Fallado"
     SENTOK: "El envío a los Siguientes Destinatarios fue Exitoso"
     SN: "Apellidos"
+  Newsletter:
+    DaysVerificationIsValid: "El correo electrónico de verificación es válido %d días"
