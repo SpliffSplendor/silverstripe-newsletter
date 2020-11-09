@@ -20,6 +20,8 @@ class CheckboxSetWithExtraField extends CheckboxSetField
     public $cellDisabled = array();
     public $tragable = true;
 
+    public $values;
+
     /**
      * Creates a new optionset field.
      *
@@ -35,14 +37,17 @@ class CheckboxSetWithExtraField extends CheckboxSetField
         $name,
         $title = "",
         $source = array(),
-        $extra = array(),
         $value = "",
+        $extra = array(),
         $extraValue = array(),
         $form = null
     ) {
         if (!empty($extra)) {
             $this->extra = $extra;
         }
+
+        $this->values = $value;
+
         if (!empty($extraValue)) {
             $this->extraValue = $extraValue;
         }
@@ -75,13 +80,18 @@ class CheckboxSetWithExtraField extends CheckboxSetField
     public function Field($properties = array())
     {
         $source = $this->source;
-        $values = $this->value;
+        $values = $this->values;
         // Get values from the join, if available
         if (is_object($this->form)) {
             $record = $this->form->getRecord();
-            if (!$values && $record && $record->hasMethod($this->name)) {
-                $funcName = $this->name;
-                $join = $record->$funcName();
+            if (!$values && $record) {
+                if ($record->hasMethod($this->name)) {
+                    $funcName = $this->name;
+                    $join = $record->$funcName();
+                } elseif ($record->hasField($this->name)) {
+                    $funcName = sprintf('%sAsArray', $this->name);
+                    $join = $record->$funcName();
+                }
                 if ($join) {
                     foreach ($join as $joinItem) {
                         $values[] = $joinItem->ID;
